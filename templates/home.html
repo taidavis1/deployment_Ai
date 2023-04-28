@@ -6,21 +6,51 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- ### CSS ### -->
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     </head>
     <body style="background-image:url('/static/img/background.jpeg') ; background-position:center; background-repeat:no-repeat ; background-size:cover" class="font-sans text-black w-screen h-screen overscroll-x-none overscroll-y-none">
         <div class="flex justify-center mt-4 p-4">
             <img class="w-40 rounded-full hover:opacity-75 cursor-pointer" src="/static/img/uroc.png">
         </div>
+        <div id= "box" style="display:none;" class="flex justify-center mt-3 p-3 bg-green-400"></div>
         <div class="mt-2 p-3">
             <div>
-                <form method="POST" class="grid justify-items-center">
-                    <input id = "input1" name="input1" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Temperature(F)">
-                    <input id = "input2" name="input2" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Humid(%)">
-                    <input id = "input3" name="input3" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Windspeed (km/hr)">
-                    <input id = "input4" name="input4" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Cloud cover(%)">
+                <form action = "/" method="POST" class="grid justify-items-center">
+                    <input type="number" id="temp"  name="temp" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Temperature(F)">
+                    <input type="number" id = "humidity" name="humidity" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Humid(%)">
+                    <input type="number" id = "windspeed" name="windspeed" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Windspeed (km/hr)">
+                    <input type="number" id = "cloudcover" name="cloudcover" class="w-10/12 appearance-none block rounded-full py-3 px-4 mt-4 leading-tight focus:outline-sky-200 " type="text" placeholder="Cloud cover(%)">
                     <button type="submit" class="mt-4 bg-transparent hover:bg-blue-500 text-white font-semibold py-3 px-8 border-2 border-sky-500 hover:border-transparent rounded">Submit</button>
                 </form>
             </div>
         </div>
     </body>
+    <script>
+        $(document).ready(function(){
+            $('form').on('submit' , function(event){
+                $.ajax({
+                    data: {
+                        temp: $('#temp').val(),
+                        humidity: $('#humidity').val(),
+                        windspeed: $('#windspeed').val(),
+                        cloudcover: $('#cloudcover').val(),
+                    },
+                    type: 'POST',
+                    url: '/',
+                })
+                .done(function(data){
+                    $('#box').show().text(data.msg);
+                    $('#temp').val() == '';
+                    $('#humidity').val() == '';
+                    $('#windspeed').val() == '';
+                    $('#cloudcover').val() == '';
+                });
+                event.preventDefault();
+            });
+        });
+    </script>
 </html>
